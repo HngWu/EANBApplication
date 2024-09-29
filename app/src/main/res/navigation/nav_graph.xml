@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.eanbapplication.Ultilities.home"
+        android:name="com.example.eanbapplication.home"
         android:label="Home Fragment"
         tools:layout="@layout/fragment_home" />
     <activity

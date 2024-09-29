@@ -55,5 +55,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0") // Check for the latest version
+    implementation ("com.google.android.material:material:1.10.0")
+    implementation ("androidx.viewpager2:viewpager2:1.0.0")
 
 }
