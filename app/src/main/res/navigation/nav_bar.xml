@@ -2,8 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    android:id="@+id/nav_bar"
+    app:startDestination="@id/eventsFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -15,9 +15,9 @@
     </fragment>
 
     <activity
-        android:id="@+id/mainActivity"
+        android:id="@+id/homeActivity"
         android:name="com.example.eanbapplication.MainActivity"
-        android:label="MainActivity" />
+        android:label="HomeActivity" />
     <fragment
         android:id="@+id/eventsFragment"
         android:name="com.example.eanbapplication.EventsFragment"

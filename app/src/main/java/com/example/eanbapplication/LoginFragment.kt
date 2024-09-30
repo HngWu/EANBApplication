@@ -1,5 +1,6 @@
 package com.example.eanbapplication
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -59,9 +60,9 @@ class LoginFragment : Fragment() {
         binding.buttonLogin.setOnClickListener { view ->
             val newStudentObj = User(binding.editTextUsername.text.toString(),binding.editTextPassword.text.toString())
 
-            //httploginservice(this,newStudentObj).execute()
+            httploginservice(this,newStudentObj).execute()
             Log.d("Logging", "LoginFragment")
-            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+            //findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
 
 
         }
@@ -76,8 +77,16 @@ class LoginFragment : Fragment() {
         Log.d("Logging", "LoginFragment")
 
 
-        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-    }
+        try {
+            val intent = Intent(context, HomeActivity::class.java)
+            startActivity(intent)
+
+
+            //findNavController().navigate(R.id.action_loginFragment_to_eventsFragment)
+        } catch (e: Exception) {
+            Log.e("LoginFragment", "Navigation failed", e)
+            Toast.makeText(context, "Navigation error: ${e.message}", Toast.LENGTH_LONG).show()
+        }    }
 
     fun loginfailed() {
         Toast.makeText(context, "Invalid Username or Password", Toast.LENGTH_SHORT).show();
