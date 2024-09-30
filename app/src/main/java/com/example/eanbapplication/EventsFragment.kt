@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.eanbapplication.Models.Event
 import com.example.eanbapplication.placeholder.PlaceholderContent
 
 /**
@@ -42,6 +43,10 @@ class EventsFragment : Fragment() {
             }
         }
         return view
+    }
+
+    fun onEventsRetrieved(result: MutableList<Event>) {
+        TODO("Not yet implemented")
     }
 
     companion object {

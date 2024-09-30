@@ -60,10 +60,10 @@ class LoginFragment : Fragment() {
         binding.buttonLogin.setOnClickListener { view ->
             val newStudentObj = User(binding.editTextUsername.text.toString(),binding.editTextPassword.text.toString())
 
-            httploginservice(this,newStudentObj).execute()
+            //httploginservice(this,newStudentObj).execute()
             Log.d("Logging", "LoginFragment")
-            //findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-
+            val intent = Intent(context, HomeActivity::class.java)
+            startActivity(intent)
 
         }
     }
