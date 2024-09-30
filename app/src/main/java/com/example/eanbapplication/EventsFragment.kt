@@ -8,6 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.eanbapplication.Models.Event
 import com.example.eanbapplication.placeholder.PlaceholderContent
 
@@ -21,9 +25,7 @@ class EventsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
+
     }
 
     override fun onCreateView(
@@ -42,25 +44,26 @@ class EventsFragment : Fragment() {
                 adapter = MyItemRecyclerViewAdapter(PlaceholderContent.ITEMS)
             }
         }
+
+        view.findViewById<ComposeView>(R.id.compose_view).setContent {
+            Greeting("Don") // Call your composable function here
+        }
+
         return view
     }
 
     fun onEventsRetrieved(result: MutableList<Event>) {
-        TODO("Not yet implemented")
+
     }
 
-    companion object {
+    @Composable
+    fun Greeting(name: String) {
+        Text(text = "Hello $name!")
+    }
 
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            EventsFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
-            }
+    @Preview(showBackground = true)
+    @Composable
+    fun DefaultPreview() {
+        Greeting("Don") // Preview for the EventsScreen
     }
 }
