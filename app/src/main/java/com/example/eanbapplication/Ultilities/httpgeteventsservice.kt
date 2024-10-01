@@ -1,27 +1,21 @@
 package com.example.eanbapplication.Ultilities
 
-import android.os.AsyncTask
+import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
-import android.widget.Toast
-import com.example.eanbapplication.EventsFragment
 import com.example.eanbapplication.Models.Event
 import com.example.eanbapplication.Models.RequestedItem
-import com.example.eanbapplication.databinding.FragmentEventsBinding
 import org.json.JSONArray
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-class httpgeteventsservice(
-    private var context: EventsFragment,
-    private val binding: FragmentEventsBinding
-) : AsyncTask<Void, Void, MutableList<Event>>() {
+class HttpGetEventsService(private val context: Context) {
 
-    override fun doInBackground(vararg params: Void?): MutableList<Event>? {
+    fun fetchEvents(): MutableList<Event>? {
         try {
-            val sp = PreferenceManager.getDefaultSharedPreferences(context.context?.applicationContext ?: null)
+            val sp = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
             val userJSONString = sp.getString("User", null)
             val userJson = JSONArray(userJSONString).getJSONObject(0)
             val intUserId = userJson.optInt("userId")
@@ -45,39 +39,43 @@ class httpgeteventsservice(
 
                 val jSONArray = JSONArray(jsonData.toString())
                 val eventsList = mutableListOf<Event>()
-                try {
-                    for (i in 0 until jSONArray.length()) {
-                        val event = jSONArray.getJSONObject(i)
-                        val event_id = event.optInt("event_id")
-                        val user_id = event.optInt("user_id")
-                        val location_id = event.optInt("location_id")
-                        val name = event.optString("name")
-                        val start = event.optString("start")
-                        val end = event.optString("end")
-                        val requested_items = mutableListOf<RequestedItem>()
-                        val newEvent = Event(event_id, user_id, location_id, name, start, end, requested_items)
-                        eventsList.add(newEvent)
+                for (i in 0 until jSONArray.length()) {
+                    val event = jSONArray.getJSONObject(i)
+                    val eventId = event.optInt("event_id")
+                    val userId = event.optInt("user_id")
+                    val locationId = event.optInt("location_id")
+                    val name = event.optString("name")
+                    val start = event.optString("start")
+                    val end = event.optString("end")
+                    val requestedItems = mutableListOf<RequestedItem>()
+                    val requestedItemsArray = event.optJSONArray("requestedItems")
+                    if (requestedItemsArray != null) {
+                        for (j in 0 until requestedItemsArray.length()) {
+                            val requestedItem = requestedItemsArray.getJSONObject(j)
+                            val requestedItemId = requestedItem.optInt("requestedItemId")
+                            val requestedItemName = requestedItem.optString("name")
+                            val requestedItemAmount = requestedItem.optInt("amount")
+                            val requestedItemStartDate = requestedItem.optString("startDate")
+                            val requestedItemEndDate = requestedItem.optString("endDate")
+                            val isFulfilled = requestedItem.optBoolean("isFulfilled")
+
+                            val newRequestedItem = RequestedItem(
+                                requestedItemId, eventId, requestedItemName, requestedItemAmount,
+                                requestedItemStartDate, requestedItemEndDate, isFulfilled
+                            )
+                            requestedItems.add(newRequestedItem)
+                        }
                     }
-                    return eventsList
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                    val newEvent = Event(eventId, userId, locationId, name, start, end, requestedItems)
+                    eventsList.add(newEvent)
                 }
+                con.disconnect()
+                return eventsList
             }
             con.disconnect()
         } catch (e: Exception) {
             e.printStackTrace()
         }
         return null
-    }
-
-    override fun onPostExecute(result: MutableList<Event>?) {
-        super.onPostExecute(result)
-        if (result != null) {
-            // Set up RecyclerView
-            context.onEventsRetrieved(result)
-
-        } else {
-            Toast.makeText(context.requireContext(), "Failed to load data", Toast.LENGTH_SHORT).show()
-        }
     }
 }
